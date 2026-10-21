@@ -168,15 +168,14 @@ Then copy `main.js`, `manifest.json` and `styles.css` as above.
 
 ## Status
 
-**Not published yet.** The repository is currently private, so nothing here is
-reachable by an installer. The order things have to happen in is written down
-in [`docs/release-process.md`](docs/release-process.md); the short version is
-that the repository has to be made public **before** the release is tagged, because
-Obsidian downloads the files from raw content URLs that return 404 for a private
-repository.
+**Published** — the repository is public and tagged `0.1.0`, with a GitHub
+Release carrying `manifest.json`, `main.js` and `styles.css`: exactly the files
+the Obsidian installer downloads. The release follows the order written down in
+[`docs/release-process.md`](docs/release-process.md) — public before tagged.
 
-Once it is public, this is the **first public release**: stable and tested, but
-young.
+This is the **first public release**: stable and tested, but young. It is not
+yet in Obsidian's community plugin list; until it is, install from the Release
+assets (or via BRAT) — see the Release page.
 
 It is also honest about its edges:
 [`docs/known-limitations.md`](docs/known-limitations.md) lists exactly what has and
