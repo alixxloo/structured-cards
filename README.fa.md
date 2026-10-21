@@ -21,13 +21,17 @@
 
 ---
 
-![یادداشتی حاوی چند Structured Card در تم روشن](docs/images/overview-light.png)
-
-Structured Cards بلوک‌های مارک‌داونِ داخل پرانتز (`fenced block`) را به فیلدهایی
+Structured Cards بلوک‌های مارک‌داون داخل پرانتز — یعنی کدبلاک‌های
+`structured-field` و `structured-card` — را به فیلدهایی
 برچسب‌دار و تایپ‌دار تبدیل می‌کند که می‌توانید در همان‌جا ویرایش‌شان کنید، بکشید و
 جابه‌جا کنید. یک منوی کشویی وضعیت، یک جعبهٔ کلید API، یک کادر متن چندخطی — همه به
 شکل کارت نمایش داده می‌شوند، هر جا خواستید می‌کشیدشان، و در زیرِ همه‌چیز هنوز
-**متن سادهٔ خودِ یادداشت** است.
+**متن سادهٔ خودِ یادداشت** است. افزونه فقط همین کدبلاک‌ها را می‌خواند و هیچ چیز
+دیگری را: نه Properties یادداشت (YAML Frontmatter) و نه بخش دیگری از یادداشت شما را لمس می‌کند.
+
+| چیزی که افزونه می‌خواند | چیزی که هرگز parse نمی‌شود |
+| --- | --- |
+| کدبلاک‌های ```` ```structured-field ```` و ```` ```structured-card ```` در بدنهٔ یادداشت | Properties / YAML Frontmatter بالای یادداشت |
 
 ## چرا Structured Cards؟
 
@@ -69,17 +73,9 @@ Structured Cards بلوک‌های مارک‌داونِ داخل پرانتز (
   ویرایش و خواندن جابه‌جا کنید، با لبه یا گوشه اندازه‌شان را عوض کنید، با
   راهنماهای تراز که به همسایه‌ها می‌چسبند.
 
-<p align="center">
-  <img src="docs/images/overview-dark.png" alt="کارتی ساخته‌شده از آیتم‌ها، کنترل‌های تایپ‌دار، یک مقدار ساده، یک کارت خالی و دو کارت در یک ردیف" width="720">
-</p>
-
 ![از مارک‌داون تا کارت‌های کشیدنی — گردش کار استراکچرد کارتس](assets/structured-cards-workflow.png)
 
 ## قابلیت‌های ویرایش
-
-<p align="center">
-  <img src="docs/images/controls-dark.png" alt="یک آیتم با خط کشیدن و دکمهٔ حذف نمایان، و یک کارت خالی با راهنماهای placeholder" width="720">
-</p>
 
 - **آیتم را** با خط کوچک بالایش بکشید.
 - **کارت را** با دستگیره‌اش بکشید — هم در ویرایشگر هم در نمای خواندن؛
@@ -228,22 +224,22 @@ curl -fsSL https://raw.githubusercontent.com/alixxloo/structured-cards/main/inst
 
 </div>
 
-**ویندوز PowerShell (فرم متغیر محیطی، سازگار با `irm | iex`):**
+**ویندوز PowerShell — تعاملی (اگر در پوشهٔ فعلی یک vault باشد خودش پیدا می‌کند، یا مسیر را می‌پرسد):**
+
+<div dir="ltr" align="left">
+
+```powershell
+irm https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.ps1 | iex
+```
+
+</div>
+
+**ویندوز PowerShell — پاس دادن مستقیم مسیر vault:**
 
 <div dir="ltr" align="left">
 
 ```powershell
 $env:VAULT = "C:\Path\To\Your\Vault"; irm https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.ps1 | iex
-```
-
-</div>
-
-**ویندوز PowerShell (با آرگومان، از طریق `scriptblock`):**
-
-<div dir="ltr" align="left">
-
-```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.ps1))) -VaultPath "C:\Path\To\Your\Vault"
 ```
 
 </div>

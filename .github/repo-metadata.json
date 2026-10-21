@@ -1,7 +1,7 @@
 {
-  "$comment": "Recommended GitHub About metadata for the structured-cards repository. Kept in-repo so it cannot drift, and so it can be applied without any CLI at hand (Settings -> General in the UI, or the REST API notes in docs/release-process.md).",
+  "$comment": "Recommended GitHub About metadata for the structured-cards repository. Kept in-repo so it cannot drift, and so it can be applied without any CLI at hand (Settings -> General in the UI, or the REST API notes in docs/release-process.md). The plugin reads structured-field and structured-card codeblocks only; it never touches note properties (YAML frontmatter), so the description says exactly that.",
   "name": "Structured Cards",
-  "description": "🃏 Transform Markdown notes, YAML properties, and codeblocks into interactive, customizable visual cards inside Obsidian.",
+  "description": "🃏 Render structured-card and structured-field Markdown codeblocks as interactive, customizable visual cards inside Obsidian.",
   "website": "https://github.com/alixxloo/structured-cards#readme",
   "topics": [
     "obsidian",
@@ -14,7 +14,6 @@
     "pkm",
     "note-taking",
     "obsidian-cards",
-    "typescript",
     "productivity",
     "javascript"
   ],

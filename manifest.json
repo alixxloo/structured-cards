@@ -3,7 +3,7 @@
   "name": "Structured Cards",
   "version": "0.1.0",
   "minAppVersion": "1.5.0",
-  "description": "Standalone, draggable Markdown-backed fields and user-created layouts.",
+  "description": "Render structured-card and structured-field codeblocks as interactive, customizable visual cards inside your Obsidian notes.",
   "author": "alixxloo",
   "authorUrl": "https://github.com/alixxloo",
   "isDesktopOnly": false

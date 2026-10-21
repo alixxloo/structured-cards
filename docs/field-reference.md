@@ -71,7 +71,7 @@ spaces, dots, dashes and underscores.
 | --- | --- | --- | --- |
 | `required` | boolean | `false` | Sets the control's `required` attribute. |
 | `validation` | string | — | Applied as the control's `pattern` attribute, with the same string as its `title`. See the caveat below. |
-| `copy` | boolean | — | **Reserved, no longer used.** The copy button was removed in 0.1.0. The key is still accepted so that a note written by an earlier build keeps its line untouched instead of being rewritten as unknown metadata. |
+| `copy` | boolean | — | **Reserved, no longer used.** The copy button was removed in 0.1.0. The key is still accepted so a note written by an earlier build keeps parsing cleanly: the line is recognised as reserved and silently dropped on rewrite, rather than being turned into metadata that would then be written back forever. |
 | `masked` | boolean | depends | Whether a secret field starts masked. Defaults to `true` when the field type is `secret` **or** the field contains a secret item; otherwise `false`. Set `masked: false` to start revealed. |
 | `secret` | boolean | — | Shorthand: a field is a secret when its type is `secret`. |
 

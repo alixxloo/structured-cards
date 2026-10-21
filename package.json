@@ -1,7 +1,7 @@
 {
   "name": "structured-cards",
   "version": "0.1.0",
-  "description": "Standalone, draggable Markdown-backed fields and user-created layouts.",
+  "description": "Render structured-card and structured-field codeblocks as interactive, customizable visual cards inside your Obsidian notes.",
   "main": "main.js",
   "scripts": {
     "build": "node build.mjs",
@@ -9,8 +9,7 @@
     "prepare-stubs": "node tests/stubs.cjs",
     "test": "node build.mjs && node tests/stubs.cjs && node tests/run.cjs",
     "check:counts": "node tests/counts.cjs",
-    "test:quick": "node build.mjs && node tests/stubs.cjs && node tests/t.cjs && node tests/artifact.cjs && node tests/compat.cjs",
-    "screenshots": "node tools/screenshots.mjs"
+    "test:quick": "node build.mjs && node tests/stubs.cjs && node tests/t.cjs && node tests/artifact.cjs && node tests/compat.cjs"
   },
   "devDependencies": {
     "esbuild": "^0.25.0",

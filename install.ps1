@@ -1,10 +1,10 @@
 # Structured Cards - one-line Obsidian vault installer for Windows.
 #
-# One line install (pass the vault path):
-#   & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.ps1))) -VaultPath "C:\Path\To\Your\Vault"
+# One line install (interactive: detects a vault in the current directory, or asks):
+#   irm https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.ps1 | iex
 #
-# One line install (env var form, plain irm | iex):
-#   $env:VAULT="C:\Path\To\Your\Vault"; irm https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.ps1 | iex
+# One line install (pass the vault path via the VAULT env var):
+#   $env:VAULT = "C:\Path\To\Your\Vault"; irm https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.ps1 | iex
 #
 # Saved copy:
 #   .\install.ps1 -VaultPath "C:\Path\To\Your\Vault"
@@ -43,8 +43,8 @@ if ($VaultPath) {
   $VaultPath = (Get-Location).Path
   Done "Vault detected from the current directory: $VaultPath"
 } elseif ($Host.Name -eq "ConsoleHost" -and [Environment]::UserInteractive) {
-  Step "You are inside an Obsidian vault and the path was not passed."
-  $VaultPath = Read-Host "Type your Obsidian vault path"
+  Step "No vault path was passed (-VaultPath and `$env:VAULT). Enter it now."
+  $VaultPath = Read-Host "Enter full path to your Obsidian Vault"
 } else {
   Fail1 "No vault path. Re-run with -VaultPath `"C:\Path\To\Your\Vault`" or set `$env:VAULT first."
 }

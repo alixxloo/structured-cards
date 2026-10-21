@@ -27,7 +27,7 @@ The de-minified file then went through five review rounds:
 | 5 | Publication readiness | 0 defects, 7 structural changes |
 | 6 | Directions, hint bidi and both settings surfaces, reported from Obsidian | 6, plus design corrections listed in the round itself |
 
-**1326 assertions across 24 suites.** `npm test`.
+**The full test suite.** `npm test`.
 
 ---
 

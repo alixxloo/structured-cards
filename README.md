@@ -13,7 +13,7 @@
 [![Stars](https://img.shields.io/github/stars/alixxloo/structured-cards)](https://github.com/alixxloo/structured-cards/stargazers)
 [![Minimum Obsidian](https://img.shields.io/badge/minimum-1.5.0-8a8a8a)](manifest.json)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-1326%20passing-success)](tests/)
+[![Tests](https://img.shields.io/badge/tests-1328%20passing-success)](tests/)
 
 [Install](#installation) · [Syntax](#usage-guide) · [Reference](#structured-field-keys) · [Documentation](#documentation)
 
@@ -21,12 +21,17 @@
 
 ---
 
-![A note containing several Structured Cards, in the light theme](docs/images/overview-light.png)
-
-Structured Cards turns fenced Markdown blocks into labelled, typed fields you can
+Structured Cards turns fenced Markdown blocks — `structured-field` and
+`structured-card` codeblocks — into labelled, typed fields you can
 edit in place, drag around, and resize. A status dropdown, an API key box, a notes
 textarea — they render as a card, you drag them where you want, and underneath they
-are still **plain text in your note**.
+are still **plain text in your note**. The plugin reads those codeblocks, and
+nothing else: it does not touch note properties (YAML frontmatter) or any other
+part of your note.
+
+| This is what the plugin parses | This is never parsed |
+| --- | --- |
+| ```` ```structured-field ```` / ```` ```structured-card ```` codeblocks in the note body | Note properties / YAML frontmatter above the note |
 
 ## Why Structured Cards?
 
@@ -66,17 +71,9 @@ This plugin inverts that. **A field _is_ a fence.**
   the editor and reading view, resize by edge or corner, with alignment guides
   that snap to neighbours.
 
-<p align="center">
-  <img src="docs/images/overview-dark.png" alt="A card built from items, typed controls, a plain value, an empty card, and two cards in a row" width="720">
-</p>
-
 ![Planning a note with Structured Cards — from Markdown to draggable cards](assets/structured-cards-workflow.png)
 
 ## Editing controls
-
-<p align="center">
-  <img src="docs/images/controls-dark.png" alt="One item with its drag line and delete button visible, and an empty card showing its placeholder hints" width="720">
-</p>
 
 - **Drag an item** by the small line at the top of it.
 - **Drag a card** by its handle, in the editor and in reading view. Alignment
@@ -194,16 +191,17 @@ source if no release asset is reachable.
 curl -fsSL https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.sh | bash -s -- "/path/to/your/vault"
 ```
 
-**Windows PowerShell (env-var form works with `irm | iex`):**
+**Windows PowerShell — interactive (auto-detects a vault in the current
+directory, or asks for the path):**
+
+```powershell
+irm https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.ps1 | iex
+```
+
+**Windows PowerShell — pass the vault path directly:**
 
 ```powershell
 $env:VAULT = "C:\Path\To\Your\Vault"; irm https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.ps1 | iex
-```
-
-**Windows PowerShell (with an argument, via `scriptblock`):**
-
-```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.ps1))) -VaultPath "C:\Path\To\Your\Vault"
 ```
 
 Then restart Obsidian and enable **Structured Cards** under

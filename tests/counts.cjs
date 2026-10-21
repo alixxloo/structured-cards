@@ -5,6 +5,12 @@
 // person has to update by hand after every change is a number that will be
 // wrong in public — so the update is a script, and the wrong number is a fail.
 //
+// Since then the discipline got simpler: the running total is stated in exactly
+// TWO places — the README badge and the docs/architecture.md directory map.
+// Nowhere else. This script fails if either drifts from the suite, and also
+// scans every document for stray "NNNN assertions" leftovers that someone
+// reintroduced.
+//
 // This is deliberately NOT a suite in run.cjs: it spawns the whole run itself,
 // and a suite that spawns run.cjs would recurse.
 //
@@ -59,7 +65,7 @@ ok("the tally parse is sane", +X >= 1000 && +K >= 20, X + " / " + K);
 console.log(`  ground truth: ${X} assertions, 0 failed, ${K} suites\n`);
 
 // ---------------------------------------------------------------------------
-// the six canonical spots where the numbers are stated
+// the two canonical spots where the numbers are stated
 // ---------------------------------------------------------------------------
 
 function fresh(rel, re, exp1, exp2, label) {
@@ -71,16 +77,12 @@ function fresh(rel, re, exp1, exp2, label) {
      m ? `docs: ${m.slice(1).filter(Boolean).join(", ")} — suite: ${[exp1, exp2].filter(Boolean).join(", ")}` : "pattern not found");
 }
 
-fresh("README.md",            /tests-(\d+)%20passing/,                      X,  undefined, "badge test count");
-fresh("CHANGELOG.md",         /(\d+) assertions across (\d+) suites/,       X,  K,         "release test count");
-fresh("docs/architecture.md", /tests\/\s+(\d+) suites, (\d+) assertions/,   K,  X,         "directory map");
-fresh("docs/development.md",  /runs all (\d+) suites/,                      K,  undefined, "command table");
-fresh("docs/known-limitations.md", /All (\d+) assertions/,                  X,  undefined, "verification scope");
-fresh("docs/release-notes-0.1.0.md", /\*\*(\d+) assertions across (\d+) suites\.\*\*/, X, K, "release notes");
+fresh("README.md",            /tests-(\d+)%20passing/,                    X, undefined, "badge test count");
+fresh("docs/architecture.md", /tests\/\s+(\d+) suites, (\d+) assertions/, K, X,       "directory map");
 
 // ---------------------------------------------------------------------------
-// stale residuals: every other "NNNN assertions" mention must be another of
-// the canonical spots or an explicitly whitelisted historical sentence
+// stale residuals: every other "NNNN assertions" mention must be one of the
+// two canonical spots or an explicitly whitelisted historical sentence
 // ---------------------------------------------------------------------------
 
 const HISTORICAL = [
@@ -104,8 +106,7 @@ for (const rel of docs) {
   const lines = text.split(/\r?\n/);
   lines.forEach((l, i) => {
     if (/\b\d{3,}\b/.test(l) === false || !/assertions/.test(l)) return;
-    const canonical =
-      /tests-(\d+)%20passing|(\d+) assertions across (\d+) suites|(\d+) suites, (\d+) assertions|All (\d+) assertions/.test(l);
+    const canonical = /tests-(\d+)%20passing|(\d+) suites, (\d+) assertions/.test(l);
     const historical = HISTORICAL.some((h) => l.includes(h));
     if (!canonical && !historical) {
       ok(`${rel} L${i + 1}: stray test count is accounted for`, false, JSON.stringify(l.trim().slice(0, 90)));

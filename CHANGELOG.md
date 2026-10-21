@@ -31,8 +31,9 @@ built, installed and documented:
   with the same depth, examples and reference tables, natively right-to-left.
 - **Wider verification net.** The reference tables the READMEs gained are
   checked table-by-table by the markdown suite, and the Persian edition is a
-  new file in that walk — the totals quoted across the counting docs were
-  resynced to the suite's own tally.
+  new file in that walk — the suite's running total is now stated in exactly
+  two places (the README badge and the architecture map), enforced by
+  `check:counts`.
 
 ## [0.1.0] — first public release
 
@@ -181,7 +182,7 @@ user's console. Now behind `debugLogging`, default off.
 - **Stylesheet** — 44 dead rules removed, 31 KB → 27 KB.
 - **Build** — `src/main.js` → minified `main.js` via esbuild. Readable source and
   its comments were previously shipped as-is.
-- **Tests** — 1326 assertions across 24 suites, run with `npm test`.
+- **Tests** — the full suite, run with `npm test`.
 - **CI** — builds, tests, and fails if the committed `main.js` does not match
   what the source produces.
 - **Docs** — field reference, file format, architecture, development, release

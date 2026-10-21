@@ -207,7 +207,7 @@ drift away from `manifest.json`. `tests/entry.cjs` fails if the two disagree:
   "id": "structured-cards",
   "name": "Structured Cards",
   "author": "alixxloo",
-  "description": "Standalone, draggable Markdown-backed fields and user-created layouts.",
+  "description": "Render structured-card and structured-field codeblocks as interactive, customizable visual cards inside your Obsidian notes.",
   "repo": "alixxloo/structured-cards"
 }
 ```

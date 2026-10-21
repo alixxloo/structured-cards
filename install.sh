@@ -3,8 +3,12 @@
 # the system: needs curl OR wget for the release path; the source-build fallback
 # additionally uses git + node + npm).
 #
-# One line install:
+# One line install (pass the vault path):
 #   curl -fsSL https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.sh | bash -s -- "/path/to/your/vault"
+# Or via the VAULT env var:
+#   curl -fsSL https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.sh | VAULT="/path/to/your/vault" bash
+# Or plain (interactive: detects a vault in the current directory, or asks):
+#   curl -fsSL https://raw.githubusercontent.com/alixxloo/structured-cards/main/install.sh | bash
 # Local install:
 #   ./install.sh "/path/to/your/vault"
 #
@@ -36,9 +40,10 @@ err()   { printf '%s[FAIL]%s  %s\n' "$C_ERR" "$C_OFF" "$1" >&2; }
 # the script stream itself, so an interactive read has to come from /dev/tty.
 prompt_read() {
   if [ -t 0 ]; then
+    printf '%s[INPUT]%s %s' "$C_INFO" "$C_OFF" "Enter full path to your Obsidian Vault: " >&2
     read -r "$1"
   elif [ -r /dev/tty ] && [ -w /dev/tty ]; then
-    printf '%s[INPUT]%s %s ' "$C_INFO" "$C_OFF" "Type your Obsidian vault path >/dev/tty" >&2
+    printf '%s[INPUT]%s %s' "$C_INFO" "$C_OFF" "Enter full path to your Obsidian Vault: " >&2
     read -r "$1" < /dev/tty
   else
     return 1
@@ -48,8 +53,10 @@ prompt_read() {
 cmd_exists() { command -v "$1" >/dev/null 2>&1; }
 
 # --- resolve the vault ------------------------------------------------------
-VAULT="${1:-}"
-if [ -z "$VAULT" ] && [ -f ".obsidian/app.json" ]; then
+# Precedence: $1, then $VAULT, then a vault in the current directory, then an
+# interactive prompt (read from /dev/tty so piped execution still works).
+VAULT="${1:-${VAULT:-}}"
+if [ -z "$VAULT" ] && [ -d ".obsidian" ]; then
   VAULT="$PWD"; ok "Vault detected from the current directory: $VAULT"
 fi
 if [ -z "$VAULT" ]; then
@@ -58,6 +65,11 @@ if [ -z "$VAULT" ]; then
   prompt_read VAULT || { err "No terminal available for a prompt - pass the vault path as an argument."; exit 1; }
 fi
 VAULT="${VAULT%/}"
+# Expand a leading ~ so "~/Documents/MyVault" works as typed.
+case "$VAULT" in
+  "~")   VAULT="$HOME" ;;
+  "~/"*) VAULT="${HOME}/${VAULT#\~/}" ;;
+esac
 if [ ! -d "$VAULT" ]; then
   err "Vault directory not found: $VAULT"
   exit 1
@@ -131,7 +143,9 @@ else
 const fs = require("fs");
 const [config, id] = process.argv.slice(2);
 let list = [];
-try { list = JSON.parse(fs.readFileSync(config, "utf8")); } catch (e) { console.log("parse-error"); process.exit(1); }
+// Handle a UTF-8 BOM (Windows editors commonly add one) - strip it before
+// parsing, and rewrite without it (JSON.stringify below writes no BOM).
+try { list = JSON.parse(fs.readFileSync(config, "utf8").replace(/^\uFEFF/, "")); } catch (e) { console.log("parse-error"); process.exit(1); }
 if (!Array.isArray(list)) { console.log("not-array"); process.exit(1); }
 if (list.includes(id)) { console.log("already"); process.exit(0); }
 list.push(id);
@@ -144,7 +158,8 @@ NODE
 import json, sys
 config, plugin_id = sys.argv[1], sys.argv[2]
 try:
-    with open(config, "r", encoding="utf-8") as fh:
+    # utf-8-sig transparently strips a UTF-8 BOM (Windows editors add one)
+    with open(config, "r", encoding="utf-8-sig") as fh:
         data = json.load(fh)
 except Exception:
     print("parse-error"); sys.exit(1)

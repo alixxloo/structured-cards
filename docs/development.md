@@ -27,11 +27,10 @@ format: "cjs"
 | --- | --- |
 | `npm run build` | `src/main.js` → `main.js`, minified |
 | `npm run dev` | Same, rebuilding on change |
-| `npm test` | Builds, regenerates stubs, then runs all 24 suites |
-| `npm run check:counts` | Re-runs the suite and fails if the test counts stated in the docs do not match it |
+| `npm test` | Builds, regenerates stubs, then runs the full suite |
+| `npm run check:counts` | Re-runs the suite and fails if the count statements it checks (README badge, architecture map) do not match it |
 | `npm run test:quick` | The three fastest suites |
 | `npm run prepare-stubs` | Regenerates the API stubs only |
-| `npm run screenshots` | Regenerates the screenshot pages in `docs/images/` |
 
 ### `main.js` is untracked output, never a source of truth
 
@@ -40,33 +39,6 @@ format: "cjs"
 the three Release assets). Editing it directly means the next build silently
 reverts your change; the source you and every tool should edit is
 `src/main.js`.
-
-## Screenshots
-
-`npm run screenshots` writes `docs/images/*.html`: pages that render a handful
-of cards with the plugin's own render function and the plugin's own stylesheet,
-so the images in the README are the real UI rather than a mock-up. The `.html`
-files are gitignored; the `.png` files they are screenshotted into are committed,
-because README.md links to them.
-
-To refresh an image, serve the repository over http (the screenshot tool cannot
-open `file://`), open the page, and capture it at the same width so the set stays
-consistent:
-
-```sh
-npm run prepare-stubs   # the harness reuses the test stubs
-npm run screenshots
-npx --yes http-server . -p 8731   # or any static server
-```
-
-Two things are declared on the page itself, and should stay that way if the
-harness is changed:
-
-- hover-revealed controls are forced visible, because a still image cannot hover.
-  Exactly one item is marked, not every control on every card;
-- the plugin's stylesheet is inlined verbatim, and the CSS variables Obsidian
-  defines are declared by hand, because the page is the note's rendered view and
-  not Obsidian's chrome.
 
 ## Loading it in a vault
 

@@ -50,10 +50,12 @@ console.log("\n### the placeholder that shipped once already");
 //
 // `author` and `description` are shown in the plugin search results. A
 // placeholder here does not fail loudly -- it just tells every user that
-// somebody else's name is on the plugin.
+// somebody else's name is on the plugin. `your` alone is not a placeholder
+// signal (the real description says "inside your Obsidian notes"); the
+// placeholder shapes are `your-…`, `your_…` and `<your …>`.
 for (const key of ["author", "description", "name", "repo"]) {
   ok(`the entry's ${key} is not a placeholder`,
-     !/your|placeholder|todo|tbd|example/i.test(String(e[key])),
+     !/your[-_]|<\s*your|placeholder|todo|tbd|example/i.test(String(e[key])),
      e[key]);
 }
 ok("no angle-bracket placeholder survives anywhere in the entry",

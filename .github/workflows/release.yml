@@ -1,17 +1,34 @@
-# Release automation. A push of a version tag (0.2.0, v1.2.3, ...) or a manual
-# dispatch builds the plugin in a clean environment, runs the whole test suite,
-# and attaches main.js / manifest.json / styles.css to a GitHub Release whose
-# tag is exactly the version string -- the three files every installer path
-# (Obsidian's community flow, BRAT and install.sh / install.ps1) download.
+# Release automation. A push of a version tag or a manual dispatch builds the
+# plugin in a clean environment, runs the whole test suite, and attaches
+# main.js / manifest.json / styles.css to a GitHub Release whose tag is exactly
+# the version string -- the three files every installer path (Obsidian's
+# community flow, BRAT and install.sh / install.ps1) download. NO additional
+# files (screenshots, zips, anything else) are ever attached: Obsidian's
+# community plugin flow expects only those three.
+#
+# Tag triggers: GitHub Actions tag filters are globs, not regex -- the special
+# characters are `?`, `*` and `[...]` ranges, and `+` has no quantifier meaning.
+# A regex-style '[0-9]+.[0-9]+.[0-9]+' would look for literal "+" characters in
+# the tag and would never match "0.2.0". So the trigger below is as wide as
+# three dot-separated segments can be, and the Publish step guards the actual
+# release with a real validation: anything that is not a bare semver tag
+# (exact X.Y.Z, no v prefix, no suffix) fails loudly instead of publishing.
+#
+# workflow_dispatch accepts an optional `version` input (X.Y.Z); with no input
+# it fails the guard -- a manual run without a version publishes nothing.
 
 name: Release
 
 on:
   push:
     tags:
-      - "v*"
       - "*.*.*"
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (X.Y.Z, no v prefix)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -42,12 +59,24 @@ jobs:
       - name: Publish the GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
+          DISPATCH_VERSION: ${{ inputs.version }}
         run: |
           set -euo pipefail
-          TAG="${GITHUB_REF_NAME}"
-          VERSION="${TAG#v}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${DISPATCH_VERSION}"
+          else
+            TAG="${GITHUB_REF_NAME}"
+          fi
+          # Obsidian community plugins version by bare X.Y.Z tags. Accept
+          # nothing else -- no "v" prefix, no suffix.
+          if ! [[ "$TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::'$TAG' is not a bare semver tag (expected X.Y.Z, no v prefix)"
+            exit 1
+          fi
+          VERSION="$TAG"
           node tools/release-notes.mjs "$VERSION" > .release-notes.md
 
+          # Exactly the three Obsidian release assets -- never more.
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" main.js manifest.json styles.css --clobber
             gh release edit "$TAG" --title "$TAG" --notes-file .release-notes.md

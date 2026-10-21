@@ -42,6 +42,13 @@ key: |
 - Lines without a colon are ignored.
 - Keys are matched case-sensitively against the reserved set; anything else
   becomes [metadata](field-reference.md#custom-keys).
+- `copy` stays a reserved key but intentionally does nothing. An earlier
+  internal build used `copy: true` to add a clipboard button to a field; that
+  feature was removed before the first public release, but the key remains
+  reserved so notes written back then keep parsing exactly as they did —
+  without `copy:` leaking onto the card as a metadata chip. The tests
+  (`tests/nocopy.cjs`) pin that no copy UI or copy code path exists, and
+  `tests/audit.cjs` pins that the key is still understood as reserved.
 
 ---
 
