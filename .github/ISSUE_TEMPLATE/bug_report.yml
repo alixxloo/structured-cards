@@ -1,0 +1,87 @@
+name: Bug report
+description: Something in Structured Cards does not behave as documented
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing: check [known limitations](https://github.com/alixxloo/structured-cards/blob/main/docs/known-limitations.md).
+        Several common reports are documented behaviour.
+
+        **Never paste real secrets.** This plugin stores passwords in plain text
+        in your note. Redact before you post.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened
+      description: What you did, what you expected, what you got instead.
+      placeholder: I dragged the field to a new position and the note ended up duplicated.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Smallest note that reproduces it
+      description: |
+        Paste the smallest `structured-field` block that shows the problem.
+        Fenced code block so it is not rendered:
+      render: markdown
+      placeholder: |
+        ```structured-field
+        id: repro
+        label: Example
+        type: text
+        value: something
+        ```
+    validations:
+      required: true
+
+  - type: input
+    id: obsidian-version
+    attributes:
+      label: Obsidian version
+      placeholder: "1.8.7"
+    validations:
+      required: true
+
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Platform
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - iOS
+        - Android
+    validations:
+      required: true
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Console output
+      description: If there is a red error in the developer console, paste it here. Leave empty if not.
+      render: text
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched the existing issues for this.
+          required: true
+        - label: I read the known-limitations document.
+          required: true
+        - label: I removed real passwords and personal data from anything I pasted.
+          required: true

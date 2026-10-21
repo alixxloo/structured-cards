@@ -1,0 +1,42 @@
+name: Feature request
+description: Suggest something Structured Cards should do
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do that you cannot do now?
+      description: Describe the situation, not the solution. The solution is often not the best one.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you have in mind
+      description: Optional. Skip this if you only know the problem.
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What have you tried instead?
+      description: Optional. A workaround you already use is useful information.
+
+  - type: textarea
+    id: format
+    attributes:
+      label: Would this change the file format?
+      description: |
+        Anything that changes what gets written into notes is a much bigger
+        commitment than a UI change. Be explicit here.
+      render: markdown
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I checked the community plugins list for something that already does this.
+          required: true
+        - label: I searched the existing issues for this.
+          required: true

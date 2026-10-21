@@ -1,0 +1,5 @@
+# Normalize everything to LF in the repository and on disk: a Windows checkout
+# must not rewrite every file to CRLF, or the next change becomes whole-repo
+# churn and diffs get noisy. Only the PNG screenshots are binary.
+* text=auto eol=lf
+*.png -text

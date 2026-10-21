@@ -1,0 +1,56 @@
+# Builds on every push and pull request, and fails if the committed artifact
+# does not match what the source produces. That last part is the point: Obsidian
+# installs the committed main.js, so a stale or hand-edited one is a silent
+# disaster that no local test would catch.
+
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      # Re-installing prunes tests/.tmp/node_modules, which holds hand-written
+      # API stubs. `npm test` regenerates them, but generate them explicitly so
+      # a failure here is obviously about stubs and not about the plugin.
+      - name: Prepare stubs
+        run: npm run prepare-stubs
+
+      - name: Test
+        run: npm test
+
+      - name: Check the committed artifact is current
+        run: |
+          npm run build
+          if ! git diff --quiet -- main.js; then
+            echo "::error::main.js is out of date. Run 'npm run build' and commit the result."
+            git --no-pager diff --stat -- main.js
+            exit 1
+          fi
+
+      - name: Syntax-check the source
+        run: node --check src/main.js
+
+      # `npm test` already runs this. Listed separately so a coherence failure
+      # is obvious from the CI summary rather than buried in the suite output.
+      - name: Check the release metadata is coherent
+        run: node tests/manifest.cjs

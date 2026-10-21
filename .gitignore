@@ -1,0 +1,22 @@
+# Build output is committed on purpose: Obsidian fetches main.js straight from
+# the git tag, so it has to exist in the repository, not just in a CI artifact.
+# Everything below is local-only state.
+node_modules/
+
+# Per-install settings. Obsidian writes this on first load; committing it would
+# seed every new install with someone else's choices.
+data.json
+
+# Scratch output from the release process.
+*.tgz
+*.log
+.DS_Store
+
+# Test scratch: generated stubs and the instrumented copy of the plugin.
+tests/.tmp/
+
+# Screenshot pages are generated from src/ by `npm run screenshots`. The .png files
+# they produce ARE committed, because README.md links to them. The .html sources
+# are not: each one carries a copy of the whole stylesheet, and they would go
+# stale in a way nobody would notice.
+docs/images/*.html

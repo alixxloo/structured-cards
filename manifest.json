@@ -1,0 +1,9 @@
+{
+  "id": "structured-cards",
+  "name": "Structured Cards",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "Standalone, draggable Markdown-backed fields and user-created layouts.",
+  "author": "alixxloo",
+  "isDesktopOnly": false
+}
