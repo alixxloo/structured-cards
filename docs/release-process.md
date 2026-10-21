@@ -130,10 +130,13 @@ npm test
 `package.json` and `versions.json`, and fails if a required repo file is
 missing. If it passes, the metadata is coherent.
 
-`main.js` is committed. It must be the build output, and it must match the
-version in `manifest.json`. CI fails if the committed artifact does not match
-what `npm run build` produces — a stale `main.js` is what users actually
-install, and nothing local would otherwise catch it.
+`main.js` is **not** committed. It is a build product: `.gitignore` carries
+`main.js`, and `.github/workflows/release.yml` builds it fresh from the tagged
+source on every version tag and attaches it to the Release. Obsidian, BRAT and
+the repository's `install.sh` / `install.ps1` installers all download it from
+the Release assets, never from the git tree — so a committed copy would be a
+second copy drifting silently from the source. (Retired after 0.1.0, which
+still shipped a committed copy; the assets were always the file users got.)
 
 ### 3. Commit
 
@@ -144,9 +147,16 @@ git push
 ```
 
 `data.json` is gitignored. It is per-install state; committing it seeds every
-new install with your personal settings.
+new install with your personal settings. `main.js` is gitignored for the reason
+given in step 2.
 
 ### 4. Publish the GitHub Release
+
+`name`: by default this step is automatic — pushing the tag runs
+`.github/workflows/release.yml`, which builds fresh, runs the suite, and
+attaches the assets with notes generated from this CHANGELOG's section
+(`node tools/release-notes.mjs <version>`). The manual path below is the
+fallback when the workflow cannot run.
 
 **Exactly** the version string, no `v` prefix. `0.2.0`, not `v0.2.0`.
 
@@ -245,10 +255,10 @@ The release assets are what users actually download, so the release must go.
 - [ ] `npm run build` — `main.js` regenerated
 - [ ] `npm test` — all suites pass
 - [ ] `npm run check:counts` — the test counts stated in the docs match the suite
-- [ ] `main.js` committed
 - [ ] Changes pushed to the default branch
 - [ ] GitHub Release published, tag is exactly the version string
-- [ ] `manifest.json`, `main.js`, `styles.css` attached to the release
+  - the `release.yml` run on the tag is green, and it attached
+    `manifest.json`, `main.js` and `styles.css`
 - [ ] `CHANGELOG.md` updated
 - [ ] The README's version badge shows the new version
 - [ ] README's Status section matches reality (drop the "Not published yet"

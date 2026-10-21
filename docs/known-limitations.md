@@ -7,7 +7,7 @@ filing a bug that says "it doesn't work" — one of these may already explain it
 
 ## The tests are jsdom, not Obsidian
 
-All 1314 assertions run in Node with jsdom, a mocked vault, a mocked `Editor` and
+All 1326 assertions run in Node with jsdom, a mocked vault, a mocked `Editor` and
 a mocked CodeMirror. **None of them is Obsidian.**
 
 That means the following are verified by nothing but manual testing:

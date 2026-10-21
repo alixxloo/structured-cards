@@ -1,6 +1,9 @@
-# Build output is committed on purpose: Obsidian fetches main.js straight from
-# the git tag, so it has to exist in the repository, not just in a CI artifact.
-# Everything below is local-only state.
+# The build product is deliberately NOT committed. Obsidian (and BRAT, and the
+# install.sh / install.ps1 installers) download main.js from the GitHub Release
+# assets, which .github/workflows/release.yml builds fresh from the tagged
+# source. A committed copy drifts silently; a build at tag time cannot.
+main.js
+
 node_modules/
 
 # Per-install settings. Obsidian writes this on first load; committing it would

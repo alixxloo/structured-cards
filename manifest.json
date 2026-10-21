@@ -5,5 +5,6 @@
   "minAppVersion": "1.5.0",
   "description": "Standalone, draggable Markdown-backed fields and user-created layouts.",
   "author": "alixxloo",
+  "authorUrl": "https://github.com/alixxloo",
   "isDesktopOnly": false
 }

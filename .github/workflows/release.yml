@@ -1,0 +1,59 @@
+# Release automation. A push of a version tag (0.2.0, v1.2.3, ...) or a manual
+# dispatch builds the plugin in a clean environment, runs the whole test suite,
+# and attaches main.js / manifest.json / styles.css to a GitHub Release whose
+# tag is exactly the version string -- the three files every installer path
+# (Obsidian's community flow, BRAT and install.sh / install.ps1) download.
+
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+      - "*.*.*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # jsdom 30 engines are ^22.22.2 || ^24.15.0 || >=26; undici 8 needs
+          # >= 22.19 (see ci.yml for the archaeology).
+          node-version: "24"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
+      - name: Publish the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          node tools/release-notes.mjs "$VERSION" > .release-notes.md
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" main.js manifest.json styles.css --clobber
+            gh release edit "$TAG" --title "$TAG" --notes-file .release-notes.md
+          else
+            gh release create "$TAG" \
+              --title "$TAG" \
+              --notes-file .release-notes.md \
+              main.js manifest.json styles.css
+          fi

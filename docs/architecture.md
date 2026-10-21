@@ -10,7 +10,7 @@ A map of the code, and the reasoning behind the parts that are not obvious.
 src/main.js        everything: parser, serialiser, renderer, commands, settings
 build.mjs          esbuild: src/main.js -> main.js, minified, externals kept
 styles.css         all styling
-tests/             24 suites, 1314 assertions
+tests/             24 suites, 1326 assertions
 ```
 
 `src/main.js` is one file because the plugin began as one file and splitting it

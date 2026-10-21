@@ -132,9 +132,9 @@ const gitignore = fs.readFileSync(path.join(P, ".gitignore"), "utf8");
 for (const entry of ["node_modules/", "data.json", "tests/.tmp/"])
   ok(".gitignore covers " + entry, gitignore.includes(entry));
 ok(
-  "main.js is NOT gitignored (Obsidian installs it from the tag)",
-  !/^main\.js\s*$/m.test(gitignore),
-  "main.js must be committed",
+  "main.js is gitignored (built fresh for each Release by release.yml)",
+  /^main\.js\s*$/m.test(gitignore) && /deliberately NOT committed/.test(gitignore),
+  "main.js ships as a Release asset, not as a committed copy",
 );
 const readme = fs.readFileSync(path.join(P, "README.md"), "utf8");
 ok(

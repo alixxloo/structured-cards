@@ -1,0 +1,28 @@
+{
+  "$comment": "Recommended GitHub About metadata for the structured-cards repository. Kept in-repo so it cannot drift, and so it can be applied without any CLI at hand (Settings -> General in the UI, or the REST API notes in docs/release-process.md).",
+  "name": "Structured Cards",
+  "description": "🃏 Transform Markdown notes, YAML properties, and codeblocks into interactive, customizable visual cards inside Obsidian.",
+  "website": "https://github.com/alixxloo/structured-cards#readme",
+  "topics": [
+    "obsidian",
+    "obsidian-plugin",
+    "obsidian-md",
+    "structured-cards",
+    "cards-view",
+    "markdown-cards",
+    "knowledge-management",
+    "pkm",
+    "note-taking",
+    "obsidian-cards",
+    "typescript",
+    "productivity",
+    "javascript"
+  ],
+  "language": "JavaScript",
+  "license": "MIT",
+  "owner": "alixxloo",
+  "applyViaApi": {
+    "description": "PATCH /repos/alixxloo/structured-cards {\"description\": <description>}",
+    "topics": "PUT /repos/alixxloo/structured-cards/topics {\"names\": <topics>}"
+  }
+}

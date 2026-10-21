@@ -27,17 +27,19 @@ format: "cjs"
 | --- | --- |
 | `npm run build` | `src/main.js` → `main.js`, minified |
 | `npm run dev` | Same, rebuilding on change |
-| `npm test` | Regenerates stubs, then runs all 24 suites |
+| `npm test` | Builds, regenerates stubs, then runs all 24 suites |
 | `npm run check:counts` | Re-runs the suite and fails if the test counts stated in the docs do not match it |
 | `npm run test:quick` | The three fastest suites |
 | `npm run prepare-stubs` | Regenerates the API stubs only |
 | `npm run screenshots` | Regenerates the screenshot pages in `docs/images/` |
 
-### Edit `src/main.js`, never `main.js`
+### `main.js` is untracked output, never a source of truth
 
-`main.js` is a build artifact **and** a committed file, because Obsidian
-downloads it straight from the git tag. Editing it directly means the next build
-silently reverts your change.
+`main.js` is a build artifact: gitignored, produced by `npm run build` (and by
+`.github/workflows/release.yml` at tag time, which is what users install —
+the three Release assets). Editing it directly means the next build silently
+reverts your change; the source you and every tool should edit is
+`src/main.js`.
 
 ## Screenshots
 

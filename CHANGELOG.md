@@ -5,6 +5,35 @@ All notable changes to Structured Cards.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Repository infrastructure
+
+Nothing here changes what the plugin does — it changes how the repository is
+built, installed and documented:
+
+- **`main.js` is no longer committed.** It now ships the way every installer
+  already consumed it: as a GitHub Release asset, built fresh from the tagged
+  source by the new release workflow. A committed build product drifts
+  silently; a build at tag time cannot. `0.1.0` still carries its copy on the
+  tag — the Release assets were then, and remain now, the files users install.
+- **One-line installers.** `install.sh` (Linux, macOS, Git Bash on Windows)
+  and `install.ps1` (Windows PowerShell 5.1+) download the latest release's
+  `manifest.json`, `main.js` and `styles.css` into a vault, enable the plugin
+  in `community-plugins.json` without rewriting anything they cannot parse,
+  and fall back to building from source when a release asset is unreachable.
+- **Release automation.** `.github/workflows/release.yml` builds, runs the
+  full test suite and attaches the three assets on every version tag; the
+  release page is generated from this file with `node tools/release-notes.mjs`.
+  CI was reworked to prove a clean build instead of guarding a committed
+  artifact.
+- **Bilingual documentation.** A Persian edition of the README (`README.fa.md`)
+  with the same depth, examples and reference tables, natively right-to-left.
+- **Wider verification net.** The reference tables the READMEs gained are
+  checked table-by-table by the markdown suite, and the Persian edition is a
+  new file in that walk — the totals quoted across the counting docs were
+  resynced to the suite's own tally.
+
 ## [0.1.0] — first public release
 
 Everything in this release was previously an unreleased internal build. This is
@@ -152,7 +181,7 @@ user's console. Now behind `debugLogging`, default off.
 - **Stylesheet** — 44 dead rules removed, 31 KB → 27 KB.
 - **Build** — `src/main.js` → minified `main.js` via esbuild. Readable source and
   its comments were previously shipped as-is.
-- **Tests** — 1314 assertions across 24 suites, run with `npm test`.
+- **Tests** — 1326 assertions across 24 suites, run with `npm test`.
 - **CI** — builds, tests, and fails if the committed `main.js` does not match
   what the source produces.
 - **Docs** — field reference, file format, architecture, development, release
