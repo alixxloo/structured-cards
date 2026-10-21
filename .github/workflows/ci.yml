@@ -23,7 +23,10 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          # jsdom 30 engines are ^22.22.2 || ^24.15.0 || >=26; the dev machine
+          # runs 24, undici 8 needs >= 22.19, so 20 was an install that passed
+          # and a require that blew up in every jsdom suite.
+          node-version: "24"
           cache: npm
 
       - name: Install
