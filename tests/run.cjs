@@ -62,7 +62,8 @@ for (const [file, what] of suites) {
   if (fail !== 0 || r.status !== 0) {
     broken.push(file);
     for (const l of out.split("\n"))
-      if (/FAIL|Error:/.test(l)) console.log("         " + l.trim().slice(0, 130));
+      if (/FAIL|Error:/.test(l) || /^\s+at /.test(l))
+        console.log("         " + l.trim().slice(0, 130));
   }
 }
 
